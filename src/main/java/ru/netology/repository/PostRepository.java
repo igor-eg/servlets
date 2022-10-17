@@ -1,16 +1,15 @@
-
 package ru.netology.repository;
-
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 // Stub
 public class PostRepository {
-  private long counter;
+  private AtomicLong counter = new AtomicLong(0);
   private ConcurrentHashMap<Long, Post> posts = new ConcurrentHashMap<>();
 
   public List<Post> all() {
@@ -23,10 +22,9 @@ public class PostRepository {
 
   public Post save(Post post) throws NotFoundException {
     if (post.getId() == 0) {
-      counter++;
-      post.setId(counter);
-      posts.put(counter, post);
-      return posts.get(counter);
+      post.setId(counter.incrementAndGet());
+      posts.put(counter.get(), post);
+      return posts.get(counter.get());
     } else if (posts.containsKey(post.getId())) {
       posts.replace(post.getId(), post);
       return posts.get(post.getId());
@@ -43,3 +41,4 @@ public class PostRepository {
     }
   }
 }
+
