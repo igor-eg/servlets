@@ -32,7 +32,6 @@ public class PostRepository {
       throw new NotFoundException("Id not found!");
     }
   }
-
   public void removeById(long id) {
     if (posts.containsKey(id)) {
       posts.remove(id);
